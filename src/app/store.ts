@@ -1,9 +1,12 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
+
 import scoreReducer from '../features/comment/score/scoreSlice';
+import userReducer from '../features/user/userSlice';
 
 
 export const store = configureStore({
   reducer: {
+    currentUser: userReducer,
     score: scoreReducer,
   },
 });

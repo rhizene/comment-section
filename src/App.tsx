@@ -1,7 +1,14 @@
+import { useAppDispatch } from 'app/hooks';
+import { Comment } from 'features/comment/Comment';
+import { fetchUser } from 'features/user/userSlice';
 import './App.css';
-import { Comment } from './features/comment/Comment';
 
 function App() {
+  const dispatch = useAppDispatch();
+  const fetchCurrentUser = ()=>dispatch(fetchUser());
+
+  fetchCurrentUser()
+
   return (
       <Comment></Comment>
   );

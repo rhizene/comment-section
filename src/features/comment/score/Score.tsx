@@ -1,5 +1,5 @@
-import { upvote, downvote, selectScore } from "./scoreSlice";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { downvote, selectScore, upvote } from "./scoreSlice";
 
 export function Score() {
     const {score} = useAppSelector(selectScore);
