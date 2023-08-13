@@ -1,16 +1,36 @@
-import { useAppDispatch } from 'app/hooks';
+import 'App.scss';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Comment } from 'features/comment/Comment';
-import { fetchUser } from 'features/user/userSlice';
-import './App.css';
+import { fetchComments, selectCommentInitialized, selectComments } from 'features/comment/commentSlice';
+import { fetchCurrentUser, selectUser } from 'features/user/userSlice';
+import { useEffect } from 'react';
+
+
 
 function App() {
   const dispatch = useAppDispatch();
-  const fetchCurrentUser = ()=>dispatch(fetchUser());
 
-  fetchCurrentUser()
+  const {currentUser} = useAppSelector(selectUser);
+  const isCommentsInitialized = useAppSelector(selectCommentInitialized);
+  const comments = useAppSelector(selectComments);
+
+  useEffect(()=>{
+    if(!currentUser.username) {
+      dispatch(fetchCurrentUser());
+    }
+
+    if(!isCommentsInitialized) {
+      dispatch(fetchComments());
+    }
+  });
+
+  const commentComponents = comments.map((commentData, index) => (<Comment key={index} userComment={commentData} ></Comment>))
+  
 
   return (
-      <Comment></Comment>
+    <div>
+        {commentComponents}
+    </div>
   );
 }
 

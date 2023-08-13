@@ -1,0 +1,50 @@
+@use 'styles/Colors.scss';
+@use 'styles/Buttons.scss';
+
+.comments {
+    background-color: #FFF;
+    display: flex;
+    img {
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    >.body{
+        display: flex;
+        flex-wrap: wrap;
+
+        .commenthead {
+            flex: 100% 0 0;
+            align-items: center;
+            display: grid;
+            grid-template-columns: 3rem 1fr 1fr;
+
+            button {
+                justify-self: end;
+                @extend %accentColor;
+                @extend %borderlessButton;
+            }
+
+            .commentSince {
+                @extend %secondaryColor;
+                margin-left: 1rem;
+                font-size: 0.9rem;
+                cursor: default;
+            }
+        }
+
+        >.content{
+            flex: 100% 0 0;
+        }
+    }
+
+    
+}
+
+
+
+
+
+
+
