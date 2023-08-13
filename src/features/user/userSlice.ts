@@ -1,18 +1,17 @@
-
-import { RootState } from "app/store";
-import { User } from "models/user";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "app/store";
+import { AsyncState } from "models/asyncState";
+import { User } from "models/user";
 import data from "resources/data.json";
 
 const {currentUser} = data;
 
-export interface UserState {
+export interface UserState extends AsyncState {
   currentUser: User,
-  status: 'loading'|'idle'|'failed'
 };
 
 const NO_USER:User = {
-    image: null,
+    image: {png: ''},
     username: '',
 }
   

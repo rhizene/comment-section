@@ -6,7 +6,7 @@ import { act } from 'react-dom/test-utils';
 describe('user reducer', () => {
     const initialState: UserState = {
       currentUser: {
-        image: null,
+        image: {png: ''},
         username: 'test user'
       },
       status: 'idle',
