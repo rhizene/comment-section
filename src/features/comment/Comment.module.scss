@@ -1,18 +1,25 @@
-@use 'styles/Colors.scss';
-@use 'styles/Buttons.scss';
+@use 'styles/_Colors.scss';
+@use 'styles/_Buttons.scss';
+@use 'styles/_Avatars.scss';
+@use 'styles/_Boxes.scss';
+@use 'styles/_Fields.scss';
 
 .comments {
-    background-color: #FFF;
+    @extend %boxes;
     display: flex;
+    padding: 0.5rem;
+    align-items: flex-start;
+    
+
     img {
-        border-radius: 50%;
-        width: 3rem;
-        height: 3rem;
+        @extend %avatars;
     }
 
     >.body{
+        flex: 1 0 0;
         display: flex;
         flex-wrap: wrap;
+        white-space: pre-wrap;
 
         .commenthead {
             flex: 100% 0 0;
@@ -20,14 +27,16 @@
             display: grid;
             grid-template-columns: 3rem 1fr 1fr;
 
-            button {
+            .actionButtons {
                 justify-self: end;
-                @extend %accentColor;
-                @extend %borderlessButton;
+                button {
+                    @extend %accentText;
+                    @extend %borderlessButton;
+                }
             }
 
             .commentSince {
-                @extend %secondaryColor;
+                @extend %secondaryText;
                 margin-left: 1rem;
                 font-size: 0.9rem;
                 cursor: default;
@@ -36,6 +45,20 @@
 
         >.content{
             flex: 100% 0 0;
+            
+
+            textarea {
+                resize: none;
+                border: none;
+                outline: none;
+                appearance: none;
+                width: 100%;
+                background-color: transparent;
+            }
+
+            &.editable {
+                @extend %field;
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 import 'App.scss';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Comment } from 'features/comment/Comment';
+import { AddComment } from 'features/comment/addComment/AddComment';
 import { fetchComments, selectCommentInitialized, selectComments } from 'features/comment/commentSlice';
 import { fetchCurrentUser, selectUser } from 'features/user/userSlice';
 import { useEffect } from 'react';
@@ -30,6 +31,7 @@ function App() {
   return (
     <div>
         {commentComponents}
+        <AddComment></AddComment>
     </div>
   );
 }

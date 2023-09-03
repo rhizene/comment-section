@@ -38,7 +38,7 @@ export const userSlice = createSlice({
       .addCase(fetchCurrentUser.rejected, state => {state.status = 'failed'})
       .addCase(fetchCurrentUser.fulfilled, (state, {payload}) => {
         state.status = 'idle';
-        state.currentUser = payload;
+        state.currentUser = new User(payload);
       })
     
   },

@@ -1,6 +1,15 @@
 import { User } from "models/user";
 import { Reply } from "./Reply"
 
+type UserCommentParams = {
+    id:number;
+    content: string,
+    createdAt?: string,
+    replies?: Reply[],
+    score?: number,
+    user: User,
+}
+
 export class UserComment implements Reply {
     id: number;
     content: string;
@@ -9,12 +18,14 @@ export class UserComment implements Reply {
     user: User;
     replies: Reply[] = [];
 
-    constructor(data:any) {
+    constructor(data:UserCommentParams) {
+        const createdAt = data.createdAt? new Date(data.createdAt) : new Date();
+        
         this.id        = data.id;
         this.content   = data.content;
-        this.createdAt = new Date(data.createdAt);
-        this.replies   = data.replies;
-        this.score     = data.score;
-        this.user      = new User(data.user);
+        this.createdAt = createdAt;
+        this.replies   = data.replies ? [...data.replies] : [];
+        this.score     = data.score || 0;
+        this.user      = data.user;
     }
 }

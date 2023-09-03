@@ -1,18 +1,17 @@
-@use 'styles/Colors.scss';
-@use 'styles/Buttons.scss';
+@use 'styles/_Colors.scss';
+@use 'styles/_Buttons.scss';
 
 .score {
-    /* flex:5% 0 0; */
     display: flex;
-    flex: 1 0 0;
+    flex: 0 0 0;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    @extend %accentColor;
+    @extend %accentText;
 
     button {
         @extend %borderlessButton;
-        @extend %accentColor;
+        @extend %accentText;
         font-weight: bold;
         padding: 0.5rem;
         font-size: 1.2rem;

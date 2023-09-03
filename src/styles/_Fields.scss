@@ -1,0 +1,9 @@
+@use 'styles/_Colors.scss';
+
+%field {
+    border: 2px solid #7785B7;
+    border-radius: 4px;
+    &:focus{
+        outline: none;
+    }
+}

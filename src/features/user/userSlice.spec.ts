@@ -19,11 +19,11 @@ describe('user reducer', () => {
     });
 
     it('should fetch user from data.json', () => {
-      const expected = currentUser;
+      const expected = currentUser.username;
 
       act(()=>{
         const actual = userReducer(undefined, {type: fetchCurrentUser.fulfilled, payload: currentUser});
-        expect(actual.currentUser).toBe(expected);
+        expect(actual.currentUser.username).toBe(expected);
       })
 
     
