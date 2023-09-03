@@ -1,0 +1,23 @@
+$accentColor: #3955B4;
+$secondaryColor: #C0C0C0;
+
+%accentText {
+    color: $accentColor
+}
+
+%secondaryText {
+    color: $secondaryColor;
+}
+
+%accentButton {
+    appearance: none;
+    border: none;
+    border-radius: 4px;
+    background-color: $accentColor;
+    color:  #FFF;
+    padding: 0.5rem;
+
+    &:active {
+        background-color: darken($color: $accentColor, $amount: 20);
+    }
+}
