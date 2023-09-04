@@ -1,7 +1,12 @@
+@import 'styles/_Variables';
+
 %boxes {
     background-color: #FFF;
     border-radius: 8px;
+    margin-bottom: $boxSpacing;
+}
+
+%boxWrapper {
     margin-left: 25vw;
     margin-right: 25vw;
-    margin-bottom: 1rem;
 }

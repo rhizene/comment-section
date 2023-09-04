@@ -56,7 +56,7 @@ export const commentSlice = createSlice({
           ...commentData,
           replies: commentData.replies.map(reply=>({
             ...reply,
-            createdAt: new Date(reply.createdAt),
+            user: new User(reply.user)
           })),
           user: new User(commentData.user)
         }))

@@ -6,4 +6,13 @@
     &:focus{
         outline: none;
     }
+
+    >legend {
+        background: #FFF;
+        width: unset;
+        color: #7785B7;
+        font-size: 0.6rem;
+        margin: -0.5rem 0 0.6rem 0.4rem;
+        padding-right: 0.6rem;
+    }
 }
