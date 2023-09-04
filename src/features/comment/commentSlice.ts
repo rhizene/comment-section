@@ -41,6 +41,21 @@ export const deleteComment = createAsyncThunk(
   (id:number) => Promise.resolve({id})
 );
 
+export const upvoteComment = createAsyncThunk(
+  'comment/upvote',
+  (id:number) => Promise.resolve({id})
+);
+
+export const downvoteComment = createAsyncThunk(
+  'comment/downvote',
+  (id:number) => Promise.resolve({id})
+);
+
+export const sortComments = createAsyncThunk(
+  'SORT_COMMENTS',
+  () => Promise.resolve()
+);
+
 export const commentSlice = createSlice({
   name: 'comment',
   initialState,
@@ -90,6 +105,47 @@ export const commentSlice = createSlice({
         const comments = [...state.items].filter(comment => comment.id !== payload.id)
         state.status = 'idle';
         state.items = comments;
+      })
+
+      .addCase(upvoteComment.pending, state => {state.status = 'loading'})
+      .addCase(upvoteComment.rejected, state => {state.status = 'failed'})
+      .addCase(upvoteComment.fulfilled, (state, {payload}) => {
+        const comments = [...state.items]
+        const isUpvoted = comments.some(comment => {
+          if(comment.id === payload.id) {
+            comment.score += 1;
+            return true;
+          }
+          return false;
+        });
+        if(isUpvoted) {
+          state.items = comments;
+        }
+        state.status = 'idle';
+      })
+
+      .addCase(downvoteComment.pending, state => {state.status = 'loading'})
+      .addCase(downvoteComment.rejected, state => {state.status = 'failed'})
+      .addCase(downvoteComment.fulfilled, (state, {payload}) => {
+        const comments = [...state.items]
+        const isDownvoted = comments.some(comment => {
+          if(comment.id === payload.id) {
+            comment.score -= 1;
+            return true;
+          }
+          return false;
+        });
+        if(isDownvoted) {
+          state.items = comments;
+        }
+        state.status = 'idle';
+      })
+
+      .addCase(sortComments.fulfilled, (state)=>{
+          state.items = state.items.sort(
+            (previous,next)=>
+              UserComment.sort(previous as UserComment,next as UserComment)
+            );
       })
   },
 });

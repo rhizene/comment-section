@@ -71,7 +71,7 @@ export function Comment({userComment}:CommentParams) {
     return (
         <div className={styles.commentContainer}>
             <div className={commentStyle.join(' ')}>
-                <Score score={userComment.score}  />
+                <Score commentId={userComment.id} score={userComment.score}  />
                 <div className={styles.body}>
                     <div className={styles.commenthead}>
                         <img src={userImage} alt={"avatar of "+commenter.username}/>

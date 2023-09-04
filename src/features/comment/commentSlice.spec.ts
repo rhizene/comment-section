@@ -2,16 +2,16 @@
 import { User } from "models/user";
 import { UserComment } from "models/userComment";
 import data from "resources/data.json";
-import commentReducer, { addComment, deleteComment, editComment, fetchComments } from "./commentSlice";
+import commentReducer, { addComment, deleteComment, downvoteComment, editComment, fetchComments, upvoteComment } from "./commentSlice";
 const {comments, currentUser} = data;
 
 describe('comment reducer', () => {
-    const INITIAL_STATE = commentReducer(undefined, {type: fetchComments.fulfilled, payload: comments});
+    const generateInitialState = ()=>commentReducer(undefined, {type: fetchComments.fulfilled, payload: comments});
     const UNKOWN_ACTION = {type: null};
     
     it('should fetch from data.json', async () => {
         const expected = comments.length;
-        const actual = commentReducer(INITIAL_STATE, UNKOWN_ACTION)
+        const actual = commentReducer(generateInitialState(), UNKOWN_ACTION)
         expect(actual.items.length).toBe(expected);
     });
 
@@ -19,7 +19,7 @@ describe('comment reducer', () => {
     it('should add comments', async () => {
         const expected = comments.length + 1;
         const newComment = new UserComment({content: 'test', id: 9, user: new User(currentUser)})
-        const actual = commentReducer(INITIAL_STATE, {type: addComment.fulfilled, payload: newComment});
+        const actual = commentReducer(generateInitialState(), {type: addComment.fulfilled, payload: newComment});
 
         expect(actual.items.length).toBe(expected);
     });
@@ -27,7 +27,7 @@ describe('comment reducer', () => {
     it('should edit comments', async () => {
         const EDITED_ID = 1;
         const expected = "changed comment content";
-        const result = commentReducer(INITIAL_STATE, {type: editComment.fulfilled, payload: {id: EDITED_ID, content: expected}});
+        const result = commentReducer(generateInitialState(), {type: editComment.fulfilled, payload: {id: EDITED_ID, content: expected}});
         const actual = result.items.find(comment => comment.id === EDITED_ID);
 
         expect(actual?.content).toBe(expected);
@@ -36,7 +36,7 @@ describe('comment reducer', () => {
 
     it('should delete comments', async () => {
         const expected = 1;
-        const result = commentReducer(INITIAL_STATE, {type: deleteComment.fulfilled, payload: {id: expected}});
+        const result = commentReducer(generateInitialState(), {type: deleteComment.fulfilled, payload: {id: expected}});
         const actual = result.items;
         
         expect(actual).not.toEqual(
@@ -44,6 +44,24 @@ describe('comment reducer', () => {
                 expect.objectContaining({id: expected})
             ])
         );
+    });
+
+    it('should upvote comments', async () => {
+        const COMMENT_ID = 1;
+        const expected = 13;
+        const result = commentReducer(generateInitialState(), {type: upvoteComment.fulfilled, payload: {id: COMMENT_ID}});
+        const actual = result.items.find(comment =>comment.id === COMMENT_ID);
+        
+        expect(actual?.score).toEqual(expected);
+    });
+
+    it('should downvote comments', async () => {
+        const COMMENT_ID = 1;
+        const expected = 11;
+        const result = commentReducer(generateInitialState(), {type: downvoteComment.fulfilled, payload: {id: COMMENT_ID}});
+        const actual = result.items.find(comment =>comment.id === COMMENT_ID);
+        
+        expect(actual?.score).toEqual(expected);
     });
   
   });

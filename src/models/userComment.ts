@@ -8,6 +8,7 @@ type UserCommentParams = {
     replies?: UserCommentParams[],
     score?: number,
     user: User,
+    replyingTo?:string,
 }
 
 export class UserComment implements Reply {
@@ -17,6 +18,7 @@ export class UserComment implements Reply {
     score: number;
     user: User;
     replies: UserComment[] = [];
+    replyingTo:string | null;
 
     constructor(data:UserCommentParams) {
         const createdAt = data.createdAt? new Date(data.createdAt) : new Date();
@@ -27,8 +29,22 @@ export class UserComment implements Reply {
         this.score     = data.score || 0;
         this.user      = data.user;
         this.replies   = this.loadReplies(data.replies)
+        this.replyingTo = data.replyingTo || null
+
     }
     private loadReplies(replies: UserCommentParams[] = []): UserComment[] {
         return replies ? replies.map(reply=>new UserComment(reply as any)) : [];
+    }
+
+    static sort(previous:UserComment, next:UserComment) {
+        if(previous.replyingTo !== null) {
+            if(previous.createdAt === next.createdAt) return 0;
+            if(previous.createdAt > next.createdAt) return -1;
+            return 1;
+        }
+
+        if(previous.score === next.score) return 0;
+        if(previous.score > next.score) return -1;
+        return 1;
     }
 }
