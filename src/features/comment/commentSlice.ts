@@ -24,7 +24,7 @@ export const fetchComments = createAsyncThunk(
 
 export const addComment = createAsyncThunk(
   'comment/addComment',
-  async (comment:UserComment) => Promise.resolve(comment)
+  (comment:UserComment) => Promise.resolve(comment)
 );
 
 type CommentEdit = {
@@ -33,7 +33,12 @@ type CommentEdit = {
 }
 export const editComment = createAsyncThunk(
   'comment/editComment',
-  async (commentEdit:CommentEdit) => Promise.resolve(commentEdit)
+  (commentEdit:CommentEdit) => Promise.resolve(commentEdit)
+);
+
+export const deleteComment = createAsyncThunk(
+  'comment/deleteComment',
+  (id:number) => Promise.resolve({id})
 );
 
 export const commentSlice = createSlice({
@@ -75,6 +80,14 @@ export const commentSlice = createSlice({
           }
           return !isMatch;
         })
+        state.status = 'idle';
+        state.items = comments;
+      })
+
+      .addCase(deleteComment.pending, state => {state.status = 'loading'})
+      .addCase(deleteComment.rejected, state => {state.status = 'failed'})
+      .addCase(deleteComment.fulfilled, (state, {payload}) => {
+        const comments = [...state.items].filter(comment => comment.id !== payload.id)
         state.status = 'idle';
         state.items = comments;
       })

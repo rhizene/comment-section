@@ -1,9 +1,8 @@
 
-import data from "resources/data.json";
-import commentReducer, { addComment, editComment, fetchComments } from "./commentSlice";
-import { useAppDispatch } from "app/hooks";
-import { UserComment } from "models/userComment";
 import { User } from "models/user";
+import { UserComment } from "models/userComment";
+import data from "resources/data.json";
+import commentReducer, { addComment, deleteComment, editComment, fetchComments } from "./commentSlice";
 const {comments, currentUser} = data;
 
 describe('comment reducer', () => {
@@ -33,6 +32,18 @@ describe('comment reducer', () => {
 
         expect(actual?.content).toBe(expected);
         expect(actual?.id).toBe(EDITED_ID);
+    });
+
+    it('should delete comments', async () => {
+        const expected = 1;
+        const result = commentReducer(INITIAL_STATE, {type: deleteComment.fulfilled, payload: {id: expected}});
+        const actual = result.items;
+        
+        expect(actual).not.toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({id: expected})
+            ])
+        );
     });
   
   });

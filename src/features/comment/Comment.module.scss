@@ -21,18 +21,13 @@
         flex-wrap: wrap;
         white-space: pre-wrap;
 
-        .commenthead {
+        .commenthead, .commentfoot {
             flex: 100% 0 0;
             align-items: center;
             display: grid;
-            grid-template-columns: 3rem 1fr 1fr;
 
             .actionButtons {
                 justify-self: end;
-                button {
-                    @extend %accentText;
-                    @extend %borderlessButton;
-                }
             }
 
             .commentSince {
@@ -40,6 +35,17 @@
                 margin-left: 1rem;
                 font-size: 0.9rem;
                 cursor: default;
+            }
+        }
+
+        .commenthead{
+            grid-template-columns: 3rem 1fr 1fr;
+        }
+
+        .commentfoot{
+            grid-template-columns: 1fr;
+            .actionButtons {
+                justify-self: end;
             }
         }
 

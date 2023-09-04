@@ -1,13 +1,14 @@
-import { faPencil, faShare, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faShare, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { format, formatDistanceToNow } from 'date-fns';
 import { selectUser } from 'features/user/userSlice';
 import { UserComment } from 'models/userComment';
-import { useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import styles from './Comment.module.scss';
 import { editComment } from './commentSlice';
 import { Score } from './score/Score';
+import { DeleteButton } from './deleteButton/DeleteButton';
 
 type CommentParams = {
     userComment:UserComment
@@ -29,10 +30,12 @@ export function Comment({userComment}:CommentParams) {
     if(isEditAllowed) {
         contentClass.push(styles.editable);
     }
-
-    const toggleEdit = ()=>{
+    const commentFieldRef = useRef(null);
+    
+    function toggleEdit (fieldRef:MutableRefObject<any>){
         if(!editMode) {
             setEditMode(true);
+            fieldRef.current.focus();
         } else {
             setEditMode(false);
             setDisplayedComment(userComment.content);
@@ -42,20 +45,21 @@ export function Comment({userComment}:CommentParams) {
     const saveEdit = ()=>{
         dispatch(editComment({content: displayedComment, id: userComment.id}))
             .then(()=>setEditMode(false));
-    }
+    }    
 
     const actionButton = isOwnComment?
-    <button onClick={()=>toggleEdit()}>
-        <FontAwesomeIcon icon={editMode?faTimes:faPencil}
-        flip='horizontal'/>
-        {editMode?'Cancel':'Edit'}
+        <button className='borderless' onClick={()=>toggleEdit(commentFieldRef)}>
+            <FontAwesomeIcon icon={faPen}/>
+            Edit
         </button>
-    : <button> <FontAwesomeIcon icon={faShare} flip='horizontal'/> Reply </button>
+        : <button className='borderless'> <FontAwesomeIcon icon={faShare} flip='horizontal'/> Reply </button>
 
     const saveButton = isEditAllowed ? <button onClick={()=>saveEdit()}>
-        <FontAwesomeIcon icon={faShare} flip='horizontal' />
-        Save
-        </button>:null;
+        UPDATE</button>:null;
+
+    const deleteButton = isEditAllowed?
+        <DeleteButton id={userComment.id}></DeleteButton>
+        :null;
     
     return (
         <div className={styles.comments}>
@@ -71,21 +75,24 @@ export function Comment({userComment}:CommentParams) {
                     </div>
                     
                     <div className={styles.actionButtons}>
-                        {saveButton}
+                        {deleteButton}
                         {actionButton}
                     </div>
                 </div>
                 
                 <div className={contentClass.join(' ')}>
-                    {
-                        isEditAllowed?
-                            <textarea
-                                value={displayedComment}
-                                onChange={(e)=>setDisplayedComment(e.target.value)}>
-
-                                </textarea>
-                            :displayedComment
-                    }
+                
+                    <textarea ref={commentFieldRef}
+                        className={!isEditAllowed?'d-none':''}
+                        value={displayedComment}
+                        onChange={(e)=>setDisplayedComment(e.target.value)}>
+                    </textarea>
+                    { isEditAllowed?null :displayedComment }
+                </div>
+                <div className={styles.commentfoot}>
+                    <div className={styles.actionButtons}>
+                        {saveButton}
+                    </div>
                 </div>
 
             </div>
