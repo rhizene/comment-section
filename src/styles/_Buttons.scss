@@ -1,6 +1,27 @@
-%borderlessButton {
+@import 'styles/_Colors.scss';
+
+
+button {
+
     appearance: none;
-    background: none;
     border: none;
-    cursor: pointer;
+    border-radius: 4px;
+    background-color: $accentColor;
+    color:  #FFF;
+    padding: 0.5rem;
+    
+    &:active {
+        background-color: darken($color: $accentColor, $amount: 20);
+    }
+
+    &.borderless {
+        appearance: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        @extend %accentText;
+        &.danger{
+            @extend %dangerText;
+        }
+    }
 }

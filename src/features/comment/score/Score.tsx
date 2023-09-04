@@ -14,9 +14,9 @@ export function Score(params:ScoreParams) {
     
     return (
         <div className={styles.score}>
-            <button onClick={upvoteScore}>+</button>
+            <button className='borderless' onClick={upvoteScore}>+</button>
                 {score}
-            <button onClick={downvoteScore}>-</button>
+            <button className='borderless' onClick={downvoteScore}>-</button>
         </div>
     )
 }

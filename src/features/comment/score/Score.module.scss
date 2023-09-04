@@ -10,7 +10,6 @@
     @extend %accentText;
 
     button {
-        @extend %borderlessButton;
         @extend %accentText;
         font-weight: bold;
         padding: 0.5rem;
