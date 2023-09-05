@@ -47,4 +47,16 @@ export class UserComment implements Reply {
         if(previous.score > next.score) return -1;
         return 1;
     }
+
+    deleteReply(replyId:number){
+        let isFound = false;
+        this.replies = this.replies.filter(reply =>{
+            const isMatch = reply.id !== replyId;
+            if(isMatch) {
+                isFound = true;
+            }
+            return isMatch;
+        });
+        return isFound;
+    }
 }

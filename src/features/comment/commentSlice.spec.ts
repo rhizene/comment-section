@@ -63,6 +63,19 @@ describe('comment reducer', () => {
         
         expect(actual?.score).toEqual(expected);
     });
+
+    it('should delete replies', async () => {
+        const expected = 3;
+        const repliedFrom = 2;
+        const result = commentReducer(generateInitialState(), {type: deleteComment.fulfilled, payload: {id: expected, repliedFrom}});
+        const actual = result.items.find(comment => comment.id === repliedFrom);
+        
+        expect(actual?.replies).not.toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({id: expected})
+            ])
+        );
+    });
   
   });
   

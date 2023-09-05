@@ -6,17 +6,18 @@ import { Button, Modal } from 'react-bootstrap';
 import { deleteComment } from '../commentSlice';
 
 type DeleteButtonParams = {
-    id: number
+    id: number,
+    repliedFrom?:number,
 };
 
-export function DeleteButton({id}:DeleteButtonParams) {
+export function DeleteButton({id, repliedFrom}:DeleteButtonParams) {
     const dispatch = useAppDispatch();
     const [show, setShow] = useState(false);
     const closeDialog = () => setShow(false);
     const openDialog = () => setShow(true);
 
     const handleDeleteComment = ()=>{
-        dispatch(deleteComment(id))
+        dispatch(deleteComment({id, repliedFrom}))
             .then(closeDialog);
     }
     

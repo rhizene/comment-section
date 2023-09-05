@@ -36,9 +36,13 @@ export const editComment = createAsyncThunk(
   (commentEdit:CommentEdit) => Promise.resolve(commentEdit)
 );
 
+type DeletedComment = {
+  id:number,
+  repliedFrom?:number
+}
 export const deleteComment = createAsyncThunk(
   'comment/deleteComment',
-  (id:number) => Promise.resolve({id})
+  (deletedComment:DeletedComment) => Promise.resolve(deletedComment)
 );
 
 export const upvoteComment = createAsyncThunk(
@@ -102,9 +106,25 @@ export const commentSlice = createSlice({
       .addCase(deleteComment.pending, state => {state.status = 'loading'})
       .addCase(deleteComment.rejected, state => {state.status = 'failed'})
       .addCase(deleteComment.fulfilled, (state, {payload}) => {
-        const comments = [...state.items].filter(comment => comment.id !== payload.id)
+        if(payload.repliedFrom === undefined ) {
+          const comments = [...state.items].filter(comment => comment.id !== payload.id)
+          state.items = comments;
+        } else {
+          const comments = [...state.items];
+          const isReplyDeleted = comments.some(comment => {
+            const isRepliedComment = comment.id === payload.repliedFrom
+            if(isRepliedComment) {
+              return comment.deleteReply(payload.id);
+            }
+            return isRepliedComment;
+          });
+
+          if(isReplyDeleted){
+            state.items = comments;
+          }
+        }
+        
         state.status = 'idle';
-        state.items = comments;
       })
 
       .addCase(upvoteComment.pending, state => {state.status = 'loading'})

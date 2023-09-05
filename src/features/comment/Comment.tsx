@@ -12,10 +12,11 @@ import { Score } from './score/Score';
 import { Badge } from 'react-bootstrap';
 
 type CommentParams = {
-    userComment:UserComment
+    userComment:UserComment,
+    repliedFrom?:number
 }
 
-export function Comment({userComment}:CommentParams) {
+export function Comment({userComment, repliedFrom}:CommentParams) {
     const dispatch = useAppDispatch()
     const commenter = userComment.user;
     const userImage = commenter.image.png
@@ -59,10 +60,10 @@ export function Comment({userComment}:CommentParams) {
         UPDATE</button>:null;
 
     const deleteButton = isEditAllowed?
-        <DeleteButton id={userComment.id}></DeleteButton>
+        <DeleteButton id={userComment.id} repliedFrom={repliedFrom}></DeleteButton>
         :null;
 
-    const replies = userComment.replies.map((reply, index)=><Comment userComment={reply} key={reply.id+'_'+index}></Comment>)
+    const replies = userComment.replies.map((reply, index)=><Comment userComment={reply} repliedFrom={userComment.id} key={reply.id+'_'+index}></Comment>)
     const commentStyle = [styles.comments];
     if(replies.length > 0) {
         commentStyle.push(styles.withReplies);
