@@ -83,17 +83,12 @@
             flex: 100% 0 0;
             
 
-            textarea {
-                resize: none;
-                border: none;
-                outline: none;
-                appearance: none;
-                width: 100%;
-                background-color: transparent;
-            }
-
-            &.editable {
+            fieldset {
                 @extend %field;
+                @extend %field;        
+                &.active {
+                    @extend %fieldActive;
+                }
             }
         }
     }

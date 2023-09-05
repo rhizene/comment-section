@@ -27,8 +27,8 @@ export function DeleteButton({id, repliedFrom}:DeleteButtonParams) {
                 <FontAwesomeIcon icon={faTrash} />
                 Delete
             </button>
-            <Modal show={show} onHide={closeDialog}>
-                <Modal.Header closeButton>
+            <Modal show={show} onHide={closeDialog} centered>
+                <Modal.Header>
                 <Modal.Title>Delete Comment</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Are you sure you want to delete this comment? This will remove the comment and can't be undone</Modal.Body>

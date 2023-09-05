@@ -28,6 +28,7 @@ export function Comment({userComment, repliedFrom}:CommentParams) {
     const commentDate = format(userComment.createdAt, 'MMMM d, yyyy hh:mm aa');
     const [editMode, setEditMode] = useState(false);
     const [replyMode, setReplyMode] = useState(false);
+    const [isFieldActive, setFieldIsActive] = useState(false);
     const [displayedComment, setDisplayedComment] = useState(userComment.content);
     const isEditAllowed = isOwnComment && editMode;
     const contentClass = [styles.content];
@@ -97,12 +98,19 @@ export function Comment({userComment, repliedFrom}:CommentParams) {
                     </div>
                     
                     <div className={contentClass.join(' ')}>
-                    
-                        <textarea ref={commentFieldRef}
-                            className={!isEditAllowed?'d-none':''}
-                            value={displayedComment}
-                            onChange={(e)=>setDisplayedComment(e.target.value)}>
-                        </textarea>
+
+                        <fieldset className={[
+                            !isEditAllowed?'d-none':'',
+                            isFieldActive?styles.active:''
+                            ].join(' ')}>
+                            <legend>Add a comment</legend>
+                            <textarea ref={commentFieldRef}
+                                value={displayedComment}
+                                onFocus={()=>setFieldIsActive(true)} onBlur={()=>setFieldIsActive(false)} 
+                                onChange={(e)=>setDisplayedComment(e.target.value)}>
+                            </textarea>
+                        </fieldset>
+                        
                         { isEditAllowed?null :displayedComment }
                     </div>
                     <div className={styles.commentfoot}>

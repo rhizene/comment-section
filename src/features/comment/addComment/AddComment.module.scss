@@ -24,28 +24,16 @@
         }
 
         > button {
-            flex: 0;
+            width: 5rem;
+            margin-left: 2rem;
         }
 
         fieldset {
             flex: 1;
-            @extend %field;
-
-            textarea {
-                resize: none;
-                appearance: none;
-                border: none;
-                &:focus{
-                    outline: none;
-                }
-                
-                box-shadow: none;
-
-                width: 100%;
-                
-        
+            @extend %field;        
+            &.active {
+                @extend %fieldActive;
             }
-
         }
     }
 }

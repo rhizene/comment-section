@@ -1,5 +1,8 @@
 @import 'styles/_Variables';
 @import 'styles/_Colors';
+@import 'bootstrap/scss/_functions';
+@import 'bootstrap/scss/_variables';
+@import 'bootstrap/scss/mixins/_breakpoints';
 
 %boxes {
     background-color: #FFF;
@@ -8,8 +11,16 @@
 }
 
 %boxWrapper {
-    margin-left: 25vw;
-    margin-right: 25vw;
+
+    @include media-breakpoint-up(xs) {
+        margin-left: 2vw;
+        margin-right: 2vw;
+    }
+
+    @include media-breakpoint-up(md) {
+        margin-left: 25vw;
+        margin-right: 25vw;
+    }
 }
 
 %indentedBoxWrapper {

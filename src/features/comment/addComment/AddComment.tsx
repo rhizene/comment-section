@@ -9,6 +9,7 @@ type AddCommentParams = {replyTo?:ReplyInfo, onSend?:()=>void}
 const DEFAULT_COMMENT = '';
 export function AddComment({replyTo, onSend}:AddCommentParams) {
     const [comment, setComment] = useState(DEFAULT_COMMENT);
+    const [isFieldActive, setFieldIsActive] = useState(false);
 
     const dispatch = useAppDispatch();
     const {currentUser} = useAppSelector(selectUser);
@@ -41,9 +42,9 @@ export function AddComment({replyTo, onSend}:AddCommentParams) {
         <div className={componentClass.join(' ')}>
             <div className={styles.addComment}>
                 <img src={userImage} alt={"avatar of "+currentUser.username}/>
-                <fieldset >
+                <fieldset className={isFieldActive?styles.active:''} >
                     <legend>Add a comment</legend>
-                    <textarea rows={3} onChange={e=>setComment(e.target.value)} placeholder='Add a comment' value={comment}/>
+                    <textarea onFocus={()=>setFieldIsActive(true)} onBlur={()=>setFieldIsActive(false)} rows={3} onChange={e=>setComment(e.target.value)} placeholder='Add a comment' value={comment}/>
                 </fieldset>
                 
 
