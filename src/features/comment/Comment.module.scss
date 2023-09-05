@@ -4,17 +4,15 @@
 @use 'styles/_Fields.scss';
 @import 'styles/_Colors.scss';
 @import 'styles/_Variables';
+@import './addComment/AddComment.module';
 
 
 .commentContainer {
     position: relative;
     @extend %boxWrapper;
     >%boxWrapper {
-        margin-right: 0;
-        margin-left: $avatarWidth/2;
-        padding-left: $avatarWidth/2;
-        border-left: 1px solid $secondaryColor;
-        padding-bottom: 1rem;
+        @extend %indentedBoxWrapper;
+        
 
         &:nth-child(2) {
             padding-top: $boxSpacing;

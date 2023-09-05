@@ -10,6 +10,7 @@ import { editComment } from './commentSlice';
 import { DeleteButton } from './deleteButton/DeleteButton';
 import { Score } from './score/Score';
 import { Badge } from 'react-bootstrap';
+import { AddComment } from './addComment/AddComment';
 
 type CommentParams = {
     userComment:UserComment,
@@ -26,6 +27,7 @@ export function Comment({userComment, repliedFrom}:CommentParams) {
     const commentSince = formatDistanceToNow(userComment.createdAt, {addSuffix: true}) 
     const commentDate = format(userComment.createdAt, 'MMMM d, yyyy hh:mm aa');
     const [editMode, setEditMode] = useState(false);
+    const [replyMode, setReplyMode] = useState(false);
     const [displayedComment, setDisplayedComment] = useState(userComment.content);
     const isEditAllowed = isOwnComment && editMode;
     const contentClass = [styles.content];
@@ -44,6 +46,10 @@ export function Comment({userComment, repliedFrom}:CommentParams) {
         };
     }
 
+    function toggleReply(){
+        setReplyMode(!replyMode);
+    }
+
     const saveEdit = ()=>{
         dispatch(editComment({content: displayedComment, id: userComment.id}))
             .then(()=>setEditMode(false));
@@ -54,7 +60,7 @@ export function Comment({userComment, repliedFrom}:CommentParams) {
             <FontAwesomeIcon icon={faPen}/>
             Edit
         </button>
-        : <button className='borderless'> <FontAwesomeIcon icon={faShare} flip='horizontal'/> Reply </button>
+        : <button className='borderless' onClick={toggleReply}> <FontAwesomeIcon icon={faShare} flip='horizontal'/> Reply </button>
 
     const saveButton = isEditAllowed ? <button onClick={()=>saveEdit()}>
         UPDATE</button>:null;
@@ -109,6 +115,8 @@ export function Comment({userComment, repliedFrom}:CommentParams) {
                 
             </div>
             {replies}
+
+            {replyMode?<AddComment replyTo={{commentId:userComment.id, userName:commenter.username}} onSend={toggleReply}></AddComment>:null}
         </div>
     )
 }

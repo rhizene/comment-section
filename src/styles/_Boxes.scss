@@ -1,4 +1,5 @@
 @import 'styles/_Variables';
+@import 'styles/_Colors';
 
 %boxes {
     background-color: #FFF;
@@ -9,4 +10,12 @@
 %boxWrapper {
     margin-left: 25vw;
     margin-right: 25vw;
+}
+
+%indentedBoxWrapper {
+    margin-right: 0;
+    margin-left: $avatarWidth/2;
+    padding-left: $avatarWidth/2;
+    border-left: 1px solid $secondaryColor;
+    padding-bottom: 1rem;
 }

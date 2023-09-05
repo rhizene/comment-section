@@ -4,40 +4,48 @@
 @use 'styles/_Boxes.scss';
 @use 'styles/_Fields.scss';
 
-.addComment {
-    @extend %boxes;
+.addCommentWrapper {
     @extend %boxWrapper;
-    display: flex;
-    align-items: flex-start;
-    padding: 0.5rem 0.5rem 1.5rem 0.5rem;
 
-    > img {
-        flex: 0;
-        @extend %avatars;
+    &.replying{
+        @extend %indentedBoxWrapper;
     }
 
-    > button {
-        flex: 0;
-    }
+    .addComment {
+        @extend %boxes;
+        
+        display: flex;
+        align-items: flex-start;
+        padding: 0.5rem 0.5rem 1.5rem 0.5rem;
 
-    fieldset {
-        flex: 1;
-        @extend %field;
-
-        textarea {
-            resize: none;
-            appearance: none;
-            border: none;
-            &:focus{
-                outline: none;
-            }
-            
-            box-shadow: none;
-
-            width: 100%;
-            
-    
+        > img {
+            flex: 0;
+            @extend %avatars;
         }
 
+        > button {
+            flex: 0;
+        }
+
+        fieldset {
+            flex: 1;
+            @extend %field;
+
+            textarea {
+                resize: none;
+                appearance: none;
+                border: none;
+                &:focus{
+                    outline: none;
+                }
+                
+                box-shadow: none;
+
+                width: 100%;
+                
+        
+            }
+
+        }
     }
 }

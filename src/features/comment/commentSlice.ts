@@ -22,9 +22,18 @@ export const fetchComments = createAsyncThunk(
   ()=>Promise.resolve(comments)
 );
 
+export type ReplyInfo = {
+  commentId:number,
+  userName:string,
+};
+
+type AddComment = {
+  comment: UserComment,
+  replyTo?:ReplyInfo,
+}
 export const addComment = createAsyncThunk(
   'comment/addComment',
-  (comment:UserComment) => Promise.resolve(comment)
+  (addComment:AddComment) => Promise.resolve(addComment)
 );
 
 type CommentEdit = {
@@ -84,8 +93,26 @@ export const commentSlice = createSlice({
       .addCase(addComment.pending, state => {state.status = 'loading'})
       .addCase(addComment.rejected, state => {state.status = 'failed'})
       .addCase(addComment.fulfilled, (state, {payload}) => {
+        
+        if(payload.replyTo === undefined ) {
+          state.items.push(payload.comment)
+        } else {
+          const {replyTo} = payload;
+          const comments = [...state.items];
+          const isReplyDeleted = comments.some(comment => {
+            const isRepliedComment = comment.id === replyTo.commentId
+            if(isRepliedComment) {
+              payload.comment.replyingTo = replyTo.userName;
+              comment.addReply(payload.comment);
+            }
+            return isRepliedComment;
+          });
+
+          if(isReplyDeleted){
+            state.items = comments;
+          }
+        }
         state.status = 'idle';
-        state.items.push(payload)
       })
 
       .addCase(editComment.pending, state => {state.status = 'loading'})

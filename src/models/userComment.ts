@@ -59,4 +59,8 @@ export class UserComment implements Reply {
         });
         return isFound;
     }
+
+    addReply(reply:UserComment) {
+        this.replies.push(reply);
+    }
 }

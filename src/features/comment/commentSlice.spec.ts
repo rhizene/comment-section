@@ -76,6 +76,19 @@ describe('comment reducer', () => {
             ])
         );
     });
+
+    it('should add replies', async () => {
+        const expected = 3;
+        const repliedTo = 2;
+        const result = commentReducer(generateInitialState(), {type: addComment.fulfilled, payload: {id: expected, repliedTo}});
+        const actual = result.items.find(comment => comment.id === repliedTo);
+        
+        expect(actual?.replies).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({id: expected})
+            ])
+        );
+    });
   
   });
   
