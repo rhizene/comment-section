@@ -99,17 +99,11 @@ export const commentSlice = createSlice({
           state.items.push(payload.comment)
         } else {
           const {replyTo} = payload;
-          const comments = [...state.items];
-          const isReplyDeleted = comments.some(comment => {
-            const isRepliedComment = comment.id === replyTo.commentId
-            if(isRepliedComment) {
-              payload.comment.replyingTo = replyTo.userName;
-              comment.addReply(payload.comment);
-            }
-            return isRepliedComment;
-          });
-
-          if(isReplyDeleted){
+          const comments = _.cloneDeep(state.items) as UserComment[];
+          const repliedComment = UserComment.findById(comments, replyTo.commentId);
+          if(repliedComment !== null) {
+            payload.comment.replyingTo = replyTo.userName;
+            repliedComment.addReply(payload.comment);
             state.items = comments;
           }
         }
@@ -138,7 +132,7 @@ export const commentSlice = createSlice({
           const comments = [...state.items].filter(comment => comment.id !== payload.id)
           state.items = comments;
         } else {
-          const comments = [...state.items];
+          const comments = _.cloneDeep(state.items);
           const isReplyDeleted = comments.some(comment => {
             const isRepliedComment = comment.id === payload.repliedFrom
             if(isRepliedComment) {
