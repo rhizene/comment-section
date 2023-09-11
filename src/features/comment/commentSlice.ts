@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
+import _ from "lodash";
 import { AsyncState } from "models/asyncState";
 import { User } from "models/user";
 import { UserComment } from "models/userComment";
@@ -157,15 +158,11 @@ export const commentSlice = createSlice({
       .addCase(upvoteComment.pending, state => {state.status = 'loading'})
       .addCase(upvoteComment.rejected, state => {state.status = 'failed'})
       .addCase(upvoteComment.fulfilled, (state, {payload}) => {
-        const comments = [...state.items]
-        const isUpvoted = comments.some(comment => {
-          if(comment.id === payload.id) {
-            comment.score += 1;
-            return true;
-          }
-          return false;
-        });
-        if(isUpvoted) {
+        const comments = _.cloneDeep(state.items) as UserComment[];
+        const existingComment = UserComment.findById(comments as UserComment[], payload.id);
+        const found = existingComment !== null;
+        if(found) {
+          existingComment.upvote();
           state.items = comments;
         }
         state.status = 'idle';
@@ -174,15 +171,11 @@ export const commentSlice = createSlice({
       .addCase(downvoteComment.pending, state => {state.status = 'loading'})
       .addCase(downvoteComment.rejected, state => {state.status = 'failed'})
       .addCase(downvoteComment.fulfilled, (state, {payload}) => {
-        const comments = [...state.items]
-        const isDownvoted = comments.some(comment => {
-          if(comment.id === payload.id) {
-            comment.score -= 1;
-            return true;
-          }
-          return false;
-        });
-        if(isDownvoted) {
+        const comments = _.cloneDeep(state.items) as UserComment[];
+        const existingComment = UserComment.findById(comments as UserComment[], payload.id);
+        const found = existingComment !== null;
+        if(found) {
+          existingComment.downvote();
           state.items = comments;
         }
         state.status = 'idle';

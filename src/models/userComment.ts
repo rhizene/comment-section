@@ -63,4 +63,33 @@ export class UserComment implements Reply {
     addReply(reply:UserComment) {
         this.replies.push(reply);
     }
+
+    upvote(){
+        this.score ++;
+    }
+
+    downvote(){
+        this.score --;
+    }
+
+    private isIdMatch(otherId:number) {
+        return this.id === otherId;
+    }
+
+    static findById(comments:UserComment[], searchId:number):UserComment|null {
+        for(let i:number = 0; i < comments.length; i++) {
+            const currentComment =comments[i];
+            if(currentComment.isIdMatch(searchId)) {
+                return currentComment;
+            }
+
+            if(currentComment.replies.length > 0) {
+                const replyFound = UserComment.findById(currentComment.replies, searchId);
+                if(replyFound !== null) {
+                    return replyFound;
+                }
+            }
+        }
+        return null;
+    }
 }
