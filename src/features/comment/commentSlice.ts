@@ -113,35 +113,25 @@ export const commentSlice = createSlice({
       .addCase(editComment.pending, state => {state.status = 'loading'})
       .addCase(editComment.rejected, state => {state.status = 'failed'})
       .addCase(editComment.fulfilled, (state, {payload}) => {
-        const comments = [...state.items];
-        comments.every(comment => {
-          const isMatch = comment.id === payload.id;
-          if(isMatch) {
-            comment.content = payload.content;
-          }
-          return !isMatch;
-        })
+        const comments = _.cloneDeep(state.items) as UserComment[];
+        const editedComment = UserComment.findById(comments, payload.id);
+        if(editedComment !== null) {
+          editedComment.content = payload.content;
+          state.items = comments;
+        }
         state.status = 'idle';
-        state.items = comments;
       })
 
       .addCase(deleteComment.pending, state => {state.status = 'loading'})
       .addCase(deleteComment.rejected, state => {state.status = 'failed'})
       .addCase(deleteComment.fulfilled, (state, {payload}) => {
+        const comments = _.cloneDeep(state.items) as UserComment[];
         if(payload.repliedFrom === undefined ) {
-          const comments = [...state.items].filter(comment => comment.id !== payload.id)
-          state.items = comments;
+          state.items = comments.filter(comment => comment.id !== payload.id)
         } else {
-          const comments = _.cloneDeep(state.items);
-          const isReplyDeleted = comments.some(comment => {
-            const isRepliedComment = comment.id === payload.repliedFrom
-            if(isRepliedComment) {
-              return comment.deleteReply(payload.id);
-            }
-            return isRepliedComment;
-          });
-
-          if(isReplyDeleted){
+          const parentComment = UserComment.findById(comments, payload.repliedFrom);
+          if(parentComment !== null) {
+            parentComment.deleteReply(payload.id);
             state.items = comments;
           }
         }
