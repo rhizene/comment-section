@@ -1,0 +1,31 @@
+@import 'styles/_Colors';
+
+$primary: $accentColor;
+$secondary: $secondaryColor;
+$danger: $dangerColor;
+$theme-colors: (
+    'primary': $accentColor,
+    'secondary': $secondaryColor,
+    'danger': $dangerColor
+);
+
+@import 'bootstrap/scss/bootstrap';
+
+.btn-danger {
+    color: #fff;
+}
+
+.btn-secondary {
+    color: #71635E;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+    &.justify-center {
+        justify-content: center;
+    }
+}

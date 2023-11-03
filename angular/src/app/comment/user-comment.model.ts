@@ -22,7 +22,7 @@ export class UserComment {
   static EMPTY = new UserComment({
     id: 0,
     content: '',
-    user: {} as User,
+    user: User.EMPTY,
   })
 
   constructor(data:UserCommentParams) {
@@ -32,7 +32,7 @@ export class UserComment {
       this.content   = data.content;
       this.createdAt = createdAt;
       this.score     = data.score || 0;
-      this.user      = data.user;
+      this.user      = new User(data.user);
       this.replies   = this.loadReplies(data.replies)
       this.replyingTo = data.replyingTo || null
 

@@ -1,7 +1,37 @@
-<li>
-    {{comment.content}}
+<div class="{{commentStyle}}">
+    <div>
+        <!--scoreComponent-->
+    </div>
+    <div class="body">
+        <div class="commenthead">
+            <img src="{{comment.user.image.png}}" alt="image of {{comment.user.username}}" />
+            <div>
+                <span>{{comment.user.username}}</span>
+                <span *ngIf=isOwnComment class='badge bg-primary'>YOU</span>
+                <span class='commentSince' [title]=commentDate>{{commentSince}}</span>
+            </div>
+            <div class="actionButtons">
+                <button *ngIf="isOwnComment" class='borderless'>
+                    <app-icon iconName="faPen"/>
+                    Edit
+                </button>
+                <button *ngIf="!isOwnComment" class='borderless'>
+                    <app-icon iconName="faShare" flip='horizontal'/>
+                    Reply
+                </button>
 
-    <ul *ngFor="let reply of comment.replies">
-        <app-comment [comment]=reply [repliedFrom]=comment.id />
-    </ul>
-</li>
+
+                <!-- DeleteButton -->
+            </div>
+
+        </div>
+        
+        {{comment.content}}
+    </div>   
+
+</div>
+
+
+<ng-container *ngFor="let reply of comment.replies">
+    <app-comment [comment]=reply [repliedFrom]=comment.id />
+</ng-container>

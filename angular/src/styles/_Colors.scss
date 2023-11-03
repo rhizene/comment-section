@@ -1,0 +1,15 @@
+$accentColor: #3955B4;
+$secondaryColor: #CACACA;
+$dangerColor: #FF3535;
+
+%accentText {
+    color: $accentColor
+}
+
+%secondaryText {
+    color: $secondaryColor;
+}
+
+%dangerText {
+    color: $dangerColor
+}

@@ -1,0 +1,41 @@
+@import 'styles/_Colors.scss';
+%field {
+    border: 2px solid $secondaryColor;
+    border-radius: 4px;
+    &:focus{
+        outline: none;
+    }
+
+    >legend {
+        background: #FFF;
+        width: unset;
+        color: $secondaryColor;
+        font-size: 0.6rem;
+        margin: -0.5rem 0 0.6rem 0.4rem;
+        padding-right: 0.6rem;
+        display: none;
+    }
+
+    textarea {
+        resize: none;
+        appearance: none;
+        border: none;
+        &:focus{
+            outline: none;
+        }
+        
+        box-shadow: none;
+
+        width: 100%;
+        
+
+    }
+}
+
+%fieldActive {
+    border-color: $accentColor;
+    >legend {
+        display: block;
+        color: $accentColor;
+    }
+}

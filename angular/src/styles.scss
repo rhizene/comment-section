@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'styles/Buttons';
+
+%defaultFontFamily {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  }
+  
+
+  html {
+    body {
+        margin: 0;
+        @extend %defaultFontFamily;
+        input, textarea {
+          @extend %defaultFontFamily;
+        }
+        font-size: 14px;
+        background-color: #E7E9F6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      code {
+        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+          monospace;
+      }
+  }
+  
+  
+
+/* Importing Bootstrap SCSS file. */
+@import 'styles/Bootstrap-custom';
+
