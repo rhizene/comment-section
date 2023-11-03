@@ -4,6 +4,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { CommentService } from './comment/comment.service';
 import { CommentComponent } from './comment/comment.component';
+import { UserService } from './user/user.service';
+
+const DATA_PROVIDERS = [
+  CommentService,
+  UserService,
+];
 
 @NgModule({
   declarations: [
@@ -13,9 +19,7 @@ import { CommentComponent } from './comment/comment.component';
   imports: [
     BrowserModule,
   ],
-  providers: [
-    CommentService,
-  ],
+  providers: DATA_PROVIDERS,
   bootstrap: [AppComponent]
 })
 export class AppModule { }

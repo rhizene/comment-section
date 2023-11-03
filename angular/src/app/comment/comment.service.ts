@@ -13,9 +13,9 @@ export class CommentService {
   }
 
   async getComments():Promise<UserComment[]> {
-    return await firstValueFrom(of(data))
+    return await firstValueFrom(of(data.comments))
       .then(result => 
-        result.comments.map(commentData => new UserComment(commentData) )
+        result.map(commentData => new UserComment(commentData) )
       );
   }
 }
