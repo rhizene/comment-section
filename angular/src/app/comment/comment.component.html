@@ -1,0 +1,7 @@
+<li>
+    {{comment.content}}
+
+    <ul *ngFor="let reply of comment.replies">
+        <app-comment [comment]=reply [repliedFrom]=comment.id />
+    </ul>
+</li>
