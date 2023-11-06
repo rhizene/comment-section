@@ -1,0 +1,39 @@
+@use 'styles/_Colors.scss';
+@use 'styles/_Buttons.scss';
+@use 'styles/_Avatars.scss';
+@use 'styles/_Boxes.scss';
+@use 'styles/_Fields.scss';
+
+.addCommentWrapper {
+    @extend %boxWrapper;
+
+    &.replying{
+        @extend %indentedBoxWrapper;
+    }
+
+    .addComment {
+        @extend %boxes;
+        
+        display: flex;
+        align-items: flex-start;
+        padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+
+        > img {
+            flex: 0;
+            @extend %avatars;
+        }
+
+        > button {
+            width: 5rem;
+            margin-left: 2rem;
+        }
+
+        fieldset {
+            flex: 1;
+            @extend %field;        
+            &.active {
+                @extend %fieldActive;
+            }
+        }
+    }
+}

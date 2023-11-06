@@ -8,6 +8,8 @@ import { UserService } from './user/user.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconComponent } from './icon/icon.component';
+import { AddcommentComponent } from './comment/addcomment/addcomment.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const DATA_PROVIDERS = [
   CommentService,
@@ -18,12 +20,14 @@ const DATA_PROVIDERS = [
   declarations: [
     AppComponent,
     CommentComponent,
-    IconComponent
+    IconComponent,
+    AddcommentComponent
   ],
   imports: [
     BrowserModule,
     NgbModule,
     FontAwesomeModule,
+    ReactiveFormsModule,
   ],
   providers: DATA_PROVIDERS,
   bootstrap: [AppComponent]

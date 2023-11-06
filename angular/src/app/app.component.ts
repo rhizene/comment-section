@@ -10,7 +10,8 @@ import { UserService } from './user/user.service';
 })
 export class AppComponent {
   title = 'comment-section';
-  dataItems:UserComment[] = []; 
+  dataItems:UserComment[] = [];
+  
 
   constructor(
     private commentsService:CommentService,
@@ -26,8 +27,7 @@ export class AppComponent {
       currentUser,
     ]) => {
         this.dataItems = comments;
-      })
-      ;
+      });
 
 
   }

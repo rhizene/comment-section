@@ -1,0 +1,17 @@
+<div class="{{componentClass}}">
+    <div class="addComment">
+        <img src="{{userImage}}" alt="avatar of {{username}}"/>
+        <fieldset class="{{activeFieldClass}}" >
+            <legend>Add a comment</legend>
+            <textarea
+                (focus)=setIsFieldActive(true)
+                (blur)=setIsFieldActive(false)
+                [formControl]="commentField"
+                rows="3" placeholder='Add a comment'>
+            </textarea>
+        </fieldset>
+        
+
+        <button (click)=submitComment()>SEND</button>
+    </div>
+</div>
