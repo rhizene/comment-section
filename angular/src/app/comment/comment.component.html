@@ -1,6 +1,6 @@
 <div class="{{commentStyle}}">
     <div>
-        <!--scoreComponent-->
+        <app-score [score]=comment.score />
     </div>
     <div class="body">
         <div class="commenthead">
@@ -23,10 +23,9 @@
 
                 <!-- DeleteButton -->
             </div>
-
         </div>
         
-        {{comment.content}}
+        <div class="content">{{comment.content}}</div>
     </div>   
 
 </div>
