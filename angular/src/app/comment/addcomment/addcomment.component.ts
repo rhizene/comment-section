@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UserService } from 'src/app/user/user.service';
+import { CommentService } from '../comment.service';
+import { UserComment } from '../user-comment.model';
+import { User } from 'src/app/user/user.model';
 
 enum ADD_COMPONENT_STYLECLASS {
   wrapper=  "addCommentWrapper",
@@ -18,9 +21,10 @@ export class AddcommentComponent implements OnInit {
   replyTo?:string;
 
   userImage:string = '';
-  username:string = '';
+  currentUser:User = User.EMPTY;
+
   activeFieldClass:'active' | '' = '';
-  commentField:FormControl<string|null> = new FormControl('');
+  commentField:FormControl<string> = new FormControl('', {nonNullable: true});
 
   private _componentClass:ADD_COMPONENT_STYLECLASS[] = [ADD_COMPONENT_STYLECLASS.wrapper];
   get componentClass (){
@@ -30,6 +34,7 @@ export class AddcommentComponent implements OnInit {
   constructor(
     private cd: ChangeDetectorRef,
     private userService:UserService,
+    private commentService:CommentService,
      ){ }
 
   ngOnInit(){
@@ -40,8 +45,8 @@ export class AddcommentComponent implements OnInit {
 
     this.userService.fetchCurrentUser()
       .then(user=>{
+        this.currentUser = user;
         this.userImage = user.image.png;
-        this.username = user.username;
         this.cd.detectChanges();
       })
   }
@@ -51,7 +56,14 @@ export class AddcommentComponent implements OnInit {
   }
 
   submitComment(){
-    throw new Error('not implemented');
+    const creationDate = new Date();
+    this.commentService.addComment(new UserComment({
+      user: this.currentUser,
+      content: this.commentField.value,
+      id: creationDate.getTime(),
+      createdAt: creationDate.toString(),
+    }))
+    .then(()=>this.commentField.reset());
   }
 
 }
