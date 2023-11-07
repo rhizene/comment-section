@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { UserService } from 'src/app/user/user.service';
 import { CommentService } from '../comment.service';
 import { UserComment } from '../user-comment.model';
 import { User } from 'src/app/user/user.model';
+import { Subject } from 'rxjs';
 
 enum ADD_COMPONENT_STYLECLASS {
   wrapper=  "addCommentWrapper",
@@ -19,6 +20,9 @@ enum ADD_COMPONENT_STYLECLASS {
 export class AddcommentComponent implements OnInit {
   @Input()
   replyTo?:string;
+
+  @Output()
+  readonly onSend:Subject<void> = new Subject();
 
   userImage:string = '';
   currentUser:User = User.EMPTY;
@@ -57,13 +61,23 @@ export class AddcommentComponent implements OnInit {
 
   submitComment(){
     const creationDate = new Date();
-    this.commentService.addComment(new UserComment({
+    const comment = new UserComment({
       user: this.currentUser,
       content: this.commentField.value,
       id: creationDate.getTime(),
       createdAt: creationDate.toString(),
-    }))
-    .then(()=>this.commentField.reset());
+    });
+    let submitAction:Promise<UserComment[]>;
+    if(this.replyTo === undefined) {
+      submitAction = this.commentService.addComment(comment);
+    } else {
+      submitAction = this.commentService.reply(+this.replyTo, comment)
+    }
+
+    submitAction.then(()=>this.commentField.reset())
+      .then(()=>this.onSend.next());
+
+    
   }
 
 }

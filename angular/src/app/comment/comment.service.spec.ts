@@ -46,7 +46,7 @@ describe('CommentsService', () => {
       const expected = {id: 1, content: 'new comment contents'};
 
       service.editComment(expected.id, expected.content);
-      const actual = UserComment.findById(await service.getComments(), expected.id)
+      const actual = await findComment(expected.id);
       
 
       expect(actual?.content).toEqual(expected.content);
@@ -56,16 +56,34 @@ describe('CommentsService', () => {
       const expected = {id: 3, content: 'new comment contents'};
 
       service.editComment(expected.id, expected.content);
-      const actual = UserComment.findById(await service.getComments(), expected.id);
+      const actual = await findComment(expected.id);
       
 
       expect(actual?.content).toEqual(expected.content);
     })
   })
 
+  it('should add replies', async ()=>{
+    const expected = 3;
+    const repliedTo = 2;
+    const comment = generateComment();
+    
+    service.reply(repliedTo, comment);
+    const actual = await findComment(repliedTo);
+
+    expect(actual.replies.length).toEqual(expected);
+  })
+
   
   function getServiceComments(){
     return service.getComments();
+  }
+
+  async function findComment(commentId:number) {
+    const comment = UserComment.findById(await getServiceComments(), commentId);
+    if(comment === null) throw new Error('comment not found: ' + commentId);
+
+    return comment;
   }
 
   

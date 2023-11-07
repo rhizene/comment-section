@@ -54,4 +54,15 @@ export class CommentService {
     this.commentsUpdate.next(this.comments);
   }
 
+  reply(repliedCommentId: number, reply: UserComment) {
+    const updatedComments = _.cloneDeep(this.getStoredComments());
+    const repliedComment = UserComment.findById(updatedComments, repliedCommentId);
+    if(repliedComment === null) throw new Error('Replied comment not found: '+repliedCommentId);
+    repliedComment.addReply(reply);
+    this.comments = updatedComments;
+
+    this.commentsUpdate.next(this.comments);
+    return Promise.resolve(this.comments);
+  }
+
 }

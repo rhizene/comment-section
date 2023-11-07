@@ -21,6 +21,7 @@ export class CommentComponent implements OnInit{
   commentStyle:string = 'comments';
   editMode = false;
   isEditAllowed = false;
+  replyMode = false;
 
   editFieldControl = new FormControl('', {nonNullable: true});
 
@@ -93,7 +94,18 @@ export class CommentComponent implements OnInit{
   saveEdit(){
     this.commentService.editComment(this.comment.id, this.editFieldControl.value);
     this.editMode  = false;
+  }
 
+  toggleReply(){
+    this.replyMode = !this.replyMode;
+    this.cd.detectChanges();
+    
+  }
+
+  closeReply(){
+    this.replyMode = false;
+    this.cd.markForCheck();
+    
   }
 
 }

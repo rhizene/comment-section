@@ -19,7 +19,7 @@
                     <app-icon iconName="faPen"/>
                     Edit
                 </button>
-                <button *ngIf="!isOwnComment" class='borderless'>
+                <button *ngIf="!isOwnComment" class='borderless' (click)="toggleReply()">
                     <app-icon iconName="faShare" flip='horizontal'/>
                     Reply
                 </button>
@@ -52,3 +52,5 @@
 <ng-container *ngFor="let reply of comment.replies">
     <app-comment [comment]=reply [repliedFrom]=comment.id />
 </ng-container>
+
+<app-addcomment *ngIf="replyMode" replyTo="{{comment.id}}" (onSend)="closeReply()"> </app-addcomment>
