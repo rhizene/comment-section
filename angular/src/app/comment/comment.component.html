@@ -11,7 +11,11 @@
                 <span class='commentSince' [title]=commentDate>{{commentSince}}</span>
             </div>
             <div class="actionButtons">
-                <button *ngIf="isOwnComment" class='borderless'>
+                <button className='borderless danger' *ngIf="editMode">
+                    <app-icon iconName="faTrash"/>
+                    Delete
+                </button>
+                <button *ngIf="isOwnComment" class='borderless' (click)="toggleEditMode()">
                     <app-icon iconName="faPen"/>
                     Edit
                 </button>
@@ -19,13 +23,27 @@
                     <app-icon iconName="faShare" flip='horizontal'/>
                     Reply
                 </button>
-
-
-                <!-- DeleteButton -->
             </div>
         </div>
         
-        <div class="content">{{comment.content}}</div>
+        <div class="content">
+            <fieldset class="{{editFieldStyle}}" >
+                <legend>Add a comment</legend>
+                <textarea [formControl]="editFieldControl"
+                    rows="3"
+                    (focus)="setFieldIsActive(true)"
+                    (blur)="setFieldIsActive(false)">
+                </textarea>
+            </fieldset>
+
+            <ng-container *ngIf="!editMode">{{comment.content}}</ng-container>
+        </div>
+        <div class="commentfoot">
+            <div class="actionButtons">
+                <button (click)=saveEdit() *ngIf="editMode">
+                    UPDATE</button>
+            </div>
+        </div>
     </div>   
 
 </div>

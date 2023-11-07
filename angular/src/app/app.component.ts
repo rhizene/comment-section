@@ -15,21 +15,24 @@ export class AppComponent {
 
   constructor(
     private commentsService:CommentService,
-    private userService:UserService,
     ){
+      commentsService.commentsUpdate.subscribe({
+        next: comments =>{
+          this.dataItems = comments
+        }
+      })
+    this.refresh();
+  }
+
+  refresh(){
     Promise.all([
-      this.commentsService.getComments(),
-      this.userService.fetchCurrentUser(),
+      this.commentsService.getComments()
     ])
-
     .then(([
-      comments,
-      currentUser,
-    ]) => {
-        this.dataItems = comments;
-      });
-
-
+      comments
+    ])=>{
+      this.dataItems = comments;
+    });
   }
 }
 

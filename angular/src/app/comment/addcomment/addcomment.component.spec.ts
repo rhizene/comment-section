@@ -1,20 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import data from 'src/assets/data.json';
 import { CommentService } from '../comment.service';
 import { AddcommentComponent } from './addcomment.component';
-const { comments } = data;
+
 
 describe('AddcommentComponent', () => {
   let component: AddcommentComponent;
   let fixture: ComponentFixture<AddcommentComponent>;
 
   beforeEach(() => {
+    const commentServiceSpy = jasmine.createSpyObj('CommentService', ['addComment', 'editComment']);
     TestBed.configureTestingModule({
       declarations: [AddcommentComponent],
       imports: [ReactiveFormsModule],
-      providers: [CommentService],
+      providers: [
+        {provide: CommentService, useValue: commentServiceSpy}
+      ],
     });
     fixture = TestBed.createComponent(AddcommentComponent);
     component = fixture.componentInstance;
@@ -26,9 +28,8 @@ describe('AddcommentComponent', () => {
   });
 
   it('should add comments', async () => {
-    const expected = comments.length + 1;
-    const service = TestBed.inject(CommentService);
-    spyOn(service, 'addComment');
+    let service = TestBed.inject(CommentService) as jasmine.SpyObj<CommentService>;
+    service.addComment.and.returnValue(Promise.resolve([]));
 
     component.submitComment()
 

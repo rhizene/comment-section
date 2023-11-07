@@ -1,35 +1,56 @@
 import { Injectable } from '@angular/core';
 import data from 'src/assets/data.json';
-import {of, firstValueFrom, Subject} from "rxjs";
+import {of, firstValueFrom, Subject, lastValueFrom} from "rxjs";
 import { UserComment } from './user-comment.model';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
+  
   private comments:UserComment[] = [];
+  readonly commentsUpdate:Subject<UserComment[]> = new Subject();
   
   constructor() {
 
   }
 
-  async getComments():Promise<UserComment[]> {
-    if(this.comments.length > 0) return Promise.resolve(this.comments);
+  private getStoredComments(){
+    return this.comments;
+  }
+
+  async getComments() {
+    const currentComments = this.getStoredComments();
+    if(currentComments.length > 0) {
+      return Promise.resolve(currentComments);
+    };
 
     return this.fetchComments();
   }
 
   private async fetchComments(){
-    return await firstValueFrom(of(data.comments))
-      .then(result => 
-        result.map(commentData => new UserComment(commentData) )
-      )
-      .then(mappedComments => this.comments = mappedComments);
+    return (firstValueFrom(of(data.comments)))
+      .then(comments => {
+        this.comments = comments.map(commentData => new UserComment(commentData) );
+        return this.comments
+      });
   }
 
-  addComment(newComment: UserComment) {
-    this.comments.push(newComment);
-    return Promise.resolve();
+  addComment(newComment: UserComment):Promise<UserComment[]> {
+    const comments = this.getStoredComments();
+    comments.push(newComment);
+    return Promise.resolve(comments);
+  }
+
+  async editComment(id:number, content:string) {
+    const clonedComments = _.cloneDeep(this.getStoredComments()) as UserComment[];
+    const editedComment = UserComment.findById(clonedComments, id);
+    if(editedComment !== null){
+      editedComment.content = content;
+      this.comments = clonedComments;
+      this.commentsUpdate.next(this.comments);
+    }
   }
 
 }

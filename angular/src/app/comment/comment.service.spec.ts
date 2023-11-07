@@ -4,6 +4,7 @@ import data from 'src/assets/data.json';
 import { User } from '../user/user.model';
 import { CommentService } from './comment.service';
 import { UserComment } from './user-comment.model';
+import { lastValueFrom } from 'rxjs';
 const { comments, currentUser } = data;
 
 
@@ -14,17 +15,17 @@ describe('CommentsService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(CommentService);
     
-    await service.getComments();
+    await getServiceComments();
   });
 
   describe('addComment', ()=>{
-    const newComment = new UserComment({content: 'test', id: 9, user: new User(currentUser)})
+    const newComment = generateComment();
     
     it('should add comments', async () => {
       const expected = comments.length +1;
       service.addComment(newComment);
       
-      const actual = (await service.getComments()).length;
+      const actual = (await getServiceComments()).length;
       
       expect(actual).toEqual(expected)
     });
@@ -33,7 +34,7 @@ describe('CommentsService', () => {
       const expected = newComment;
       service.addComment(newComment);
       
-      const actual = (await service.getComments()).pop();
+      const actual = (await getServiceComments()).pop();
       
       expect(actual?.content).toEqual(expected.content);
       expect(actual?.user.username).toEqual(expected.user.username);
@@ -41,5 +42,34 @@ describe('CommentsService', () => {
 
   })
 
+  describe('editComment', ()=>{
+    it('should edit comment', async ()=>{
+      const expected = {id: 1, content: 'new comment contents'};
+
+      service.editComment(expected.id, expected.content);
+      const actual = (await service.getComments()).find(comment=>comment.id === expected.id);
+      
+
+      expect(actual?.content).toEqual(expected.content);
+    })
+  })
+
+  
+  function getServiceComments(){
+    return service.getComments();
+  }
+
   
 });
+
+
+function generateComment(customCommentParams?:{
+  content:string,
+  }) {
+  const defaultCommentParams = {content: 'test', id: 9, user: new User(currentUser)};
+  return new UserComment({
+    ...defaultCommentParams,
+    ...customCommentParams
+  })
+}
+

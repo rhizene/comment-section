@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FlipProp, IconDefinition, IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faShare, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -11,7 +11,7 @@ import { faShare, faPen } from '@fortawesome/free-solid-svg-icons';
 
 export class IconComponent {
   @Input({required: true})
-  iconName:'faPen'|'faShare'|'none' = 'none';
+  iconName:'faPen'|'faShare'|'faTrash'|'none' = 'none';
 
   @Input()
   flip?:FlipProp;
@@ -20,6 +20,7 @@ export class IconComponent {
     return {
       'faPen':faPen,
       'faShare':faShare,
+      'faTrash':faTrash,
       'none': undefined
     }[this.iconName]; 
   };
