@@ -65,4 +65,11 @@ export class CommentService {
     return Promise.resolve(this.comments);
   }
 
+  delete(targetId: number, repliedFrom?:number) {
+    const commentsCopy = _.cloneDeep(this.getStoredComments())
+                          .filter(comment => comment.id !== targetId);
+    this.comments = commentsCopy;
+    this.commentsUpdate.next(this.comments);
+  }
+
 }

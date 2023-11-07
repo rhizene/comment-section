@@ -11,10 +11,7 @@
                 <span class='commentSince' [title]=commentDate>{{commentSince}}</span>
             </div>
             <div class="actionButtons">
-                <button className='borderless danger' *ngIf="editMode">
-                    <app-icon iconName="faTrash"/>
-                    Delete
-                </button>
+                <delete-button *ngIf="editMode" [commentId]="comment.id" [repliedFrom]="comment.replyingTo"></delete-button>                
                 <button *ngIf="isOwnComment" class='borderless' (click)="toggleEditMode()">
                     <app-icon iconName="faPen"/>
                     Edit

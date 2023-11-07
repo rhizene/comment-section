@@ -74,6 +74,18 @@ describe('CommentsService', () => {
     expect(actual.replies.length).toEqual(expected);
   })
 
+  it('should delete comments', async()=>{
+    const expected = comments.length - 1;
+    const targetId = 1;
+
+    service.delete(targetId);
+    const actual = await getServiceComments();
+    const foundComment = actual.find(comment => comment.id === targetId);
+
+    expect(actual.length).toEqual(expected);
+    expect(foundComment).toBeUndefined();
+  })
+
   
   function getServiceComments(){
     return service.getComments();

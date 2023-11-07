@@ -1,0 +1,47 @@
+@use 'styles/_Colors.scss';
+@use 'styles/_Buttons.scss';
+@use 'styles/_Avatars.scss';
+@use 'styles/_Boxes.scss';
+@use 'styles/_Fields.scss';
+
+.addComment {
+    @extend %boxes;
+    display: flex;
+    align-items: flex-start;
+    padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+
+    > img {
+        flex: 0;
+        @extend %avatars;
+    }
+
+    > button {
+        flex: 0;
+    }
+
+    fieldset {
+        flex: 1;
+        @extend %field;
+
+        >legend {
+            color: #7785B7;
+            font-size: 0.6rem;
+            padding-right: 0.6rem;
+        }
+        textarea {
+            resize: none;
+            appearance: none;
+            border: none;
+            &:focus{
+                outline: none;
+            }
+            
+            box-shadow: none;
+
+            width: 100%;
+            
+    
+        }
+
+    }
+}
