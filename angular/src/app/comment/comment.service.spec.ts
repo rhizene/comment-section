@@ -4,7 +4,6 @@ import data from 'src/assets/data.json';
 import { User } from '../user/user.model';
 import { CommentService } from './comment.service';
 import { UserComment } from './user-comment.model';
-import { lastValueFrom } from 'rxjs';
 const { comments, currentUser } = data;
 
 
@@ -47,7 +46,17 @@ describe('CommentsService', () => {
       const expected = {id: 1, content: 'new comment contents'};
 
       service.editComment(expected.id, expected.content);
-      const actual = (await service.getComments()).find(comment=>comment.id === expected.id);
+      const actual = UserComment.findById(await service.getComments(), expected.id)
+      
+
+      expect(actual?.content).toEqual(expected.content);
+    })
+
+    it('should edit nested comment', async ()=>{
+      const expected = {id: 3, content: 'new comment contents'};
+
+      service.editComment(expected.id, expected.content);
+      const actual = UserComment.findById(await service.getComments(), expected.id);
       
 
       expect(actual?.content).toEqual(expected.content);

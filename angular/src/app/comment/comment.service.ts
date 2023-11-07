@@ -46,11 +46,12 @@ export class CommentService {
   async editComment(id:number, content:string) {
     const clonedComments = _.cloneDeep(this.getStoredComments()) as UserComment[];
     const editedComment = UserComment.findById(clonedComments, id);
-    if(editedComment !== null){
-      editedComment.content = content;
-      this.comments = clonedComments;
-      this.commentsUpdate.next(this.comments);
+    if(editedComment === null){
+      throw new Error('comment id not found: ' + id);
     }
+    editedComment.content = content;
+    this.comments = clonedComments;
+    this.commentsUpdate.next(this.comments);
   }
 
 }
