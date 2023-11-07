@@ -45,10 +45,8 @@ export class CommentService {
 
   async editComment(id:number, content:string) {
     const clonedComments = _.cloneDeep(this.getStoredComments()) as UserComment[];
-    const editedComment = UserComment.findById(clonedComments, id);
-    if(editedComment === null){
-      throw new Error('comment id not found: ' + id);
-    }
+    const editedComment = this.findComment(clonedComments, id);
+
     editedComment.content = content;
     this.comments = clonedComments;
     this.commentsUpdate.next(this.comments);
@@ -56,8 +54,7 @@ export class CommentService {
 
   reply(repliedCommentId: number, reply: UserComment) {
     const updatedComments = _.cloneDeep(this.getStoredComments());
-    const repliedComment = UserComment.findById(updatedComments, repliedCommentId);
-    if(repliedComment === null) throw new Error('Replied comment not found: '+repliedCommentId);
+    const repliedComment = this.findComment(updatedComments, repliedCommentId);
     repliedComment.addReply(reply);
     this.comments = updatedComments;
 
@@ -75,11 +72,42 @@ export class CommentService {
         this.comments = commentsCopy.filter((comment:UserComment) => comment.id !== commentId);
       } else {
 
-        const parentComment = UserComment.findById(commentsCopy, repliedFrom)
-        parentComment?.deleteReply(commentId);
+        const parentComment = this.findComment(commentsCopy, repliedFrom)
+        parentComment.deleteReply(commentId);
         this.comments = commentsCopy;
       }
       this.commentsUpdate.next(this.comments);
+  }
+
+  upvote(commentId: number) {
+    this.handleScore(commentId, 'upvote');
+  }
+
+  downvote(commentId: number) {
+    this.handleScore(commentId, 'downvote');
+  }
+
+  private handleScore(commentId:number, mode:'upvote'|'downvote') {
+    const copy = _.cloneDeep(this.getStoredComments());
+    const comment = this.findComment(copy, commentId);
+
+    if(mode === 'upvote') {
+      comment.upvote();
+    } else {
+      comment.downvote();
+    }
+    this.comments = copy;
+    this.commentsUpdate.next(this.comments);
+  }
+
+  private findComment(commentArray:UserComment[], commentId:number){
+    const comment = UserComment.findById(commentArray, commentId);
+    if(comment === null ) throw new Error('Comment not found. Id: ' + commentId);
+    return comment;
+  }
+
+  handleSort(){
+
   }
 
 }

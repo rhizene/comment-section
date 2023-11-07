@@ -100,6 +100,30 @@ describe('CommentsService', () => {
     expect(actual).toBeUndefined();
   })
 
+  describe('score', ()=>{
+    it('should upvote', async ()=>{
+      const commentId = 1;
+      const comment = await findComment(commentId);
+      const expected = comment.score +1;
+
+      service.upvote(commentId)
+
+      const actual = await findComment(commentId);
+      expect(actual.score).toEqual(expected);
+    });
+
+    it('should downvote', async ()=>{
+      const commentId = 1;
+      const comment = await findComment(commentId);
+      const expected = comment.score -1;
+
+      service.downvote(commentId)
+
+      const actual = await findComment(commentId);
+      expect(actual.score).toEqual(expected);
+    });
+  })
+
   
   function getServiceComments(){
     return service.getComments();
