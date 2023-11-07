@@ -122,6 +122,42 @@ describe('CommentsService', () => {
       const actual = await findComment(commentId);
       expect(actual.score).toEqual(expected);
     });
+
+    it('should sort upvoted comment', async ()=>{
+      const expected = 99;
+      const topScore = 13;
+      const generatedComment = generateComment({
+        score: topScore-1,
+        id: expected,
+      });
+      await service.addComment(generatedComment);
+
+      service.upvote(expected);
+      const latestComments = await getServiceComments();
+      const actual = latestComments.shift();
+
+      if(actual === undefined) return fail();
+      expect(actual.id).toEqual(expected);
+
+    })
+
+    it('should sort downvoted comment', async ()=>{
+      const expected = 99;
+      const topScore = 13;
+      const generatedComment = generateComment({
+        score: topScore,
+        id: expected,
+      });
+      await service.addComment(generatedComment);
+
+      service.upvote(expected);
+      const latestComments = await getServiceComments();
+      const actual = latestComments.at(1);
+
+      if(actual === undefined) return fail();
+      expect(actual.id).toEqual(expected);
+
+    })
   })
 
   
@@ -141,7 +177,9 @@ describe('CommentsService', () => {
 
 
 function generateComment(customCommentParams?:{
-  content:string,
+  id?:number
+  content?:string,
+  score?:number
   }) {
   const defaultCommentParams = {content: 'test', id: 9, user: new User(currentUser)};
   return new UserComment({

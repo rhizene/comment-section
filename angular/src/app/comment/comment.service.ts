@@ -97,7 +97,7 @@ export class CommentService {
       comment.downvote();
     }
     this.comments = copy;
-    this.commentsUpdate.next(this.comments);
+    this.handleSort();
   }
 
   private findComment(commentArray:UserComment[], commentId:number){
@@ -106,7 +106,15 @@ export class CommentService {
     return comment;
   }
 
-  handleSort(){
+  private handleSort(){
+    const sortedComments = _.cloneDeep(this.comments);
+    sortedComments.sort(
+      (previous,next)=>
+        UserComment.sort(previous as UserComment,next as UserComment)
+      );
+    this.comments = sortedComments;
+
+    this.commentsUpdate.next(this.comments);
 
   }
 
