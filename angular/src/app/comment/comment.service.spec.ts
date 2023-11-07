@@ -78,12 +78,26 @@ describe('CommentsService', () => {
     const expected = comments.length - 1;
     const targetId = 1;
 
-    service.delete(targetId);
+    service.delete({commentId: targetId});
     const actual = await getServiceComments();
     const foundComment = actual.find(comment => comment.id === targetId);
 
     expect(actual.length).toEqual(expected);
     expect(foundComment).toBeUndefined();
+  })
+
+  it('should delete replies', async()=>{
+    const expected = 1;
+    const commentId = 4;
+    const repliedFrom = 2;
+
+    service.delete({commentId, repliedFrom});
+    const comments = await getServiceComments();
+    const foundComment = comments.find(comment => comment.id === repliedFrom);
+    const actual = foundComment?.replies.find(comment => comment.id === commentId);
+
+    expect(foundComment?.replies.length).toEqual(expected);
+    expect(actual).toBeUndefined();
   })
 
   

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommentService } from '../comment.service';
+import { isNumber } from 'lodash';
 
 @Component({
   selector: 'delete-button',
@@ -11,14 +12,22 @@ export class DeleteButtonComponent {
   commentId:number = 0;
 
   @Input()
-  repliedFrom:string|null = null;
+  repliedFrom:number|null = null;
 
   constructor(private commentService:CommentService) {
 
   }
 
   delete(){
-    this.commentService.delete(this.commentId);
+    if(isNumber(this.repliedFrom)) {
+      return this.commentService.delete({
+        commentId: this.commentId,
+        repliedFrom: this.repliedFrom
+      });
+    }
+    return this.commentService.delete({
+      commentId: this.commentId
+    });
   }
 
 }

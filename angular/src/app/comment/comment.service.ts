@@ -65,11 +65,26 @@ export class CommentService {
     return Promise.resolve(this.comments);
   }
 
-  delete(targetId: number, repliedFrom?:number) {
+  
+  delete({
+    commentId,repliedFrom
+  }:DeleteCommentParams) {
     const commentsCopy = _.cloneDeep(this.getStoredComments())
-                          .filter(comment => comment.id !== targetId);
-    this.comments = commentsCopy;
-    this.commentsUpdate.next(this.comments);
+
+      if(repliedFrom === undefined) {
+        this.comments = commentsCopy.filter((comment:UserComment) => comment.id !== commentId);
+      } else {
+
+        const parentComment = UserComment.findById(commentsCopy, repliedFrom)
+        parentComment?.deleteReply(commentId);
+        this.comments = commentsCopy;
+      }
+      this.commentsUpdate.next(this.comments);
   }
 
+}
+
+type DeleteCommentParams = {
+  commentId: number,
+  repliedFrom?:number
 }

@@ -11,7 +11,7 @@
                 <span class='commentSince' [title]=commentDate>{{commentSince}}</span>
             </div>
             <div class="actionButtons">
-                <delete-button *ngIf="editMode" [commentId]="comment.id" [repliedFrom]="comment.replyingTo"></delete-button>                
+                <delete-button *ngIf="editMode" [commentId]="comment.id" [repliedFrom]="repliedFrom"></delete-button>                
                 <button *ngIf="isOwnComment" class='borderless' (click)="toggleEditMode()">
                     <app-icon iconName="faPen"/>
                     Edit
@@ -50,4 +50,4 @@
     <app-comment [comment]=reply [repliedFrom]=comment.id />
 </ng-container>
 
-<app-addcomment *ngIf="replyMode" replyTo="{{comment.id}}" (onSend)="closeReply()"> </app-addcomment>
+<app-addcomment *ngIf="replyMode" [replyTo]="comment.id" (onSend)="closeReply()"> </app-addcomment>

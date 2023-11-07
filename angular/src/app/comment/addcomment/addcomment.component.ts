@@ -19,7 +19,7 @@ enum ADD_COMPONENT_STYLECLASS {
 })
 export class AddcommentComponent implements OnInit {
   @Input()
-  replyTo?:string;
+  replyTo?:number;
 
   @Output()
   readonly onSend:Subject<void> = new Subject();
